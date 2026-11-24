@@ -262,6 +262,9 @@
             background-clip: text;
             color: transparent;
             animation: shimmer 5s linear infinite;
+            /* extend the gradient box so descenders (y, g) aren't clipped; negative margin keeps layout unchanged */
+            padding: 0.05em 0 0.2em;
+            margin-bottom: -0.2em;
         }
         .hero-sub {
             font-weight: 300;
