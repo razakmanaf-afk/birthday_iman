@@ -852,13 +852,8 @@
         <section class="section">
             <div class="section-kicker reveal">sebelum apa-apa…</div>
             <h2 class="section-title reveal">Saya nak recap video ni, moment ni saya harap akan jadi permulaan kepada kisah kehidupan kita bersama🎬</h2>
-            <p class="section-sub reveal">Tekan play, tapi lagu berhenti sekejap la sayang okayy</p>
             <div class="video-wrap reveal">
-                <video id="memVideo" playsinline preload="metadata" src="media/memories.mp4#t=0.5"></video>
-                <button class="video-play" id="videoPlay" aria-label="Main video">
-                    <span class="play-icon">▶</span>
-                    <span>Tekan guna jari sayang, bukan idung</span>
-                </button>
+                <video id="memVideo" autoplay muted loop playsinline preload="auto" src="media/MicrosoftTeams-video.mp4"></video>
             </div>
         </section>
 
@@ -1172,10 +1167,10 @@
 
         function prepareYouTube() {
             if (yt || !window.YT || !window.YT.Player) return;
-            const vars = { autoplay: 0, controls: 0, playsinline: 1, rel: 0, loop: 1, playlist: 'KZpfJ6n_CQ0' };
+            const vars = { autoplay: 0, controls: 0, playsinline: 1, rel: 0, loop: 1, playlist: 'SRmSoTgOXiQ' };
             if (location.protocol.startsWith('http')) vars.origin = location.origin;
             yt = new YT.Player('youtubeMusicPlayer', {
-                videoId: 'KZpfJ6n_CQ0',
+                videoId: 'SRmSoTgOXiQ',
                 playerVars: vars,
                 events: {
                     onReady: () => { ytReady = true; if (ytWanted) playMusic(); },
@@ -1236,21 +1231,11 @@
 
         /* ================= Video ================= */
         const memVideo = $('memVideo');
-        let musicWasPlaying = false;
-        $('videoPlay').addEventListener('click', () => {
-            musicWasPlaying = musicPlaying;
-            pauseMusic();
-            memVideo.controls = true;
-            memVideo.play().catch(() => {});
-        });
-        memVideo.addEventListener('play', () => { $('videoPlay').classList.add('hidden'); if (musicPlaying) { musicWasPlaying = true; pauseMusic(); } });
-        memVideo.addEventListener('pause', () => { if (musicWasPlaying) playMusic(); });
-        memVideo.addEventListener('ended', () => {
-            $('videoPlay').classList.remove('hidden');
-            memVideo.controls = false;
-            const r = memVideo.getBoundingClientRect();
-            burst(r.left + r.width / 2, r.top + r.height / 2, 80);
-        });
+        // Silent background loop: muted so browsers allow autoplay, and the music keeps playing.
+        memVideo.muted = true;
+        memVideo.play().catch(() => {});
+        // Some mobile browsers pause off-screen/background videos; resume when it is visible again.
+        document.addEventListener('visibilitychange', () => { if (!document.hidden) memVideo.play().catch(() => {}); });
 
         /* ================= Envelope ================= */
         function openLetter() {
